@@ -2,6 +2,7 @@ package com.tikal.cmdls.controllers
 
 import com.tikal.cmdls.model.Keyword
 import com.tikal.cmdls.services.KeywordsService
+import com.tikal.cmdls.services.RecipesService
 import org.eclipse.microprofile.openapi.annotations.Operation
 import javax.inject.Inject
 import javax.ws.rs.GET
@@ -10,23 +11,37 @@ import javax.ws.rs.Produces
 import javax.ws.rs.QueryParam
 import javax.ws.rs.core.MediaType
 
-@Path("/keywords")
+@Path("")
 class KeywordController {
 
     @Inject
     lateinit var keywordsService: KeywordsService
 
+    @Inject
+    lateinit var recipeService: RecipesService
+
     @Operation(summary = "Keyword autocompletion", description = "Get keywords by their prefix (autocompletion)")
     @GET
+    @Path("/keywords")
     @Produces(MediaType.APPLICATION_JSON)
     fun keywordAutocompletion(@QueryParam("q") key: String) =
             keywordsService.getByPartialKey(key).toList().blockingGet()
 
     @Operation(summary = "dump all", description = "Dump all keywords")
     @GET
-    @Path("all")
+    @Path("/keywords/all")
     @Produces(MediaType.APPLICATION_JSON)
     fun getAll(): List<Keyword> = keywordsService.getAll().toList().blockingGet()
+
+    @Operation
+    @GET
+    @Path("/recipes")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getRecipes(@QueryParam("keywords") keywords: String, @QueryParam("resolution") resolution: String?) =
+            recipeService.getMatchingRecipes(keywords.split(","))
+
+
+
 
 
     /*@Operation(summary = "Hi", description = "Just saying hi")
