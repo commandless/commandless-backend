@@ -38,7 +38,7 @@ class KeywordController {
     @Path("/recipes")
     @Produces(MediaType.APPLICATION_JSON)
     fun getRecipes(@QueryParam("keywords") keywords: String, @QueryParam("resolution") resolution: String?) =
-            recipeService.getMatchingRecipes(keywords.split(","))
+            recipeService.getMatchingRecipes(keywords.split(",")).toList().blockingGet()
 
 
 
