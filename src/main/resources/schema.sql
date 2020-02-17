@@ -5,7 +5,7 @@ CREATE TABLE keyword (
 
 CREATE TABLE recipe (
     id serial primary key,
-    command_id integer not null references recipe(id),
+    command_id integer not null references command(id),
     description text not null,
     inputs jsonb not null
 );
